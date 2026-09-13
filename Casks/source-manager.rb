@@ -51,14 +51,21 @@ cask "source-manager" do
     "~/Library/Saved Application State/io.github.pasdam.SourceManager.savedState",
   ]
 
+  # The path is written out rather than interpolated: `caveats` evaluates at
+  # compile time and offers token, version, homepage, caskroom_path and
+  # staged_path — `appdir` is not among them, so `#{appdir}` here would not be the
+  # directory anybody installed into.
   caveats <<~EOS
-    This build is signed ad-hoc rather than with a Developer ID, so macOS refuses
-    to open it unless Homebrew is told not to mark it as downloaded:
+    This build is signed ad-hoc rather than with a Developer ID, and is not
+    notarised, so macOS refuses to open it the first time. Either take the
+    downloaded mark off it:
 
-      brew install --cask --no-quarantine source-manager
+      xattr -dr com.apple.quarantine /Applications/SourceManager.app
 
-    If you have just installed it without that flag, reinstall with it — or open
-    the app once, let macOS refuse, and press Open Anyway in
+    or open the app once, let macOS refuse, and press Open Anyway in
     System Settings > Privacy & Security.
+
+    Older instructions say to install with --no-quarantine. Homebrew has removed
+    that flag, and passing it now fails with "invalid option".
   EOS
 end
