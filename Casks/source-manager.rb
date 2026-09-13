@@ -25,10 +25,19 @@ cask "source-manager" do
   # installing would be an app that cannot start.
   depends_on arch: :arm64
 
-  # The frameworks macdeployqt copies in are Homebrew's, built for the runner's
-  # own macOS. Lowering this means building the release on an older runner with a
-  # deployment target set, not editing this line.
-  depends_on macos: ">= :sequoia"
+  # Measured from the artifact, not chosen: the app binary's LC_BUILD_VERSION says
+  # `minos 26.0`, because it was built against the macOS 26 SDK with no deployment
+  # target set, and everything Homebrew contributed — libgit2 and what it loads —
+  # is built for the running macOS too. `brew audit --online` reads that same load
+  # command and errors if this line disagrees.
+  #
+  # Lowering it means building the release against an older SDK with a deployment
+  # target set, and against frameworks built for that release — not editing this
+  # line. `tools/make-dmg.sh --min-macos` turns a mismatch into a refusal.
+  #
+  # The symbol form *is* the minimum ("or newer"); the `">= :symbol"` spelling this
+  # used to carry is deprecated and warns on every `brew` invocation.
+  depends_on macos: :tahoe
 
   app "SourceManager.app"
 
