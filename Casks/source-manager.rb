@@ -1,11 +1,10 @@
 cask "source-manager" do
   # Both of these are written by the `Homebrew cask` workflow in
   # source-manager/app, through tools/bump-cask.sh, after a release has been
-  # published. Until the first release they are a placeholder: the url below
-  # resolves to nothing and `brew install` refuses, which is the honest state for
-  # a tap whose product has not shipped yet.
-  version "1.0.0"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
+  # published — never by hand, so that the digest always describes the bytes a
+  # reader will actually receive.
+  version "0.0.1"
+  sha256 "c7eb9c860f273e62dd7df5839aaf97a1b6e836727c053109f74068198c417d03"
 
   url "https://github.com/source-manager/dist/releases/download/v#{version}/SourceManager-#{version}-macOS.dmg"
   name "Source Manager"
